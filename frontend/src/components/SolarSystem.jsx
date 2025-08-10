@@ -1,9 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import Planet from './Planet';
 
-const planets = [
+const basePlanets = [
   { name: 'Mercury', color: '#b1b1b1', size: 0.38, distance: 12 },
   { name: 'Venus', color: '#e5c27b', size: 0.95, distance: 18 },
   { name: 'Earth', color: '#2d5f9b', size: 1.0, distance: 25 },
@@ -14,7 +14,11 @@ const planets = [
   { name: 'Neptune', color: '#4062b6', size: 3.9, distance: 110 },
 ];
 
-export function SolarSystem() {
+export function SolarSystem({ earthColor }) {
+  const planets = useMemo(() => basePlanets.map((p) =>
+    p.name === 'Earth' && earthColor ? { ...p, color: earthColor } : p
+  ), [earthColor]);
+
   return (
     <Canvas
       camera={{ position: [0, 40, 120], fov: 60 }}
