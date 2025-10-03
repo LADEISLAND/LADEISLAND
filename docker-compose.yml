@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: agi-cosmic-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: agi-cosmic
+    volumes:
+      - mongodb_data:/data/db
+      - ./backend/scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - agi-cosmic-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: agi-cosmic-backend
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      MONGODB_URI: mongodb://admin:password123@mongodb:27017/agi-cosmic?authSource=admin
+      JWT_SECRET: agi-cosmic-super-secret-jwt-key-2024-production
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      AI_MODEL: gpt-3.5-turbo
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+      CORS_ORIGIN: http://localhost:5173
+    depends_on:
+      - mongodb
+    networks:
+      - agi-cosmic-network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: agi-cosmic-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:3001/api
+      VITE_SOCKET_URL: http://localhost:3001
+      VITE_APP_NAME: AGI Cosmic
+      VITE_APP_VERSION: 1.0.0
+    depends_on:
+      - backend
+    networks:
+      - agi-cosmic-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  agi-cosmic-network:
+    driver: bridge
