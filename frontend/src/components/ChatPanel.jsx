@@ -9,10 +9,18 @@ export default function ChatPanel() {
     if (!input.trim()) return;
     setMessages((prev) => [...prev, { role: 'player', text: input }]);
     setInput('');
-    // TODO: Call backend then append AI reply
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { role: 'ai', text: 'Acknowledged — sample response.' }]);
-    }, 600);
+    fetch('http://localhost:3001/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: input }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMessages((prev) => [...prev, { role: 'ai', text: data.reply }]);
+      })
+      .catch(() => {
+        setMessages((prev) => [...prev, { role: 'ai', text: 'Error: unable to reach server.' }]);
+      });
   };
 
   return (
