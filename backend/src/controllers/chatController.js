@@ -2,6 +2,7 @@ const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const ChatSession = require('../models/ChatSession');
 const logger = require('../config/logger');
+const aiService = require('../services/aiService');
 
 // Create a new chat session
 const createChatSession = async (req, res) => {
@@ -83,34 +84,14 @@ const sendMessage = async (req, res) => {
 
     const startTime = Date.now();
     
-    // Call OpenAI API (or your preferred AI service)
+    // Call AI Service (supports multiple providers)
     let aiResponse;
     try {
-      if (process.env.OPENAI_API_KEY) {
-        const response = await axios.post(
-          'https://api.openai.com/v1/chat/completions',
-          {
-            model: chatSession.settings.model,
-            messages: aiMessages,
-            temperature: chatSession.settings.temperature,
-            max_tokens: chatSession.settings.maxTokens
-          },
-          {
-            headers: {
-              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-
-        aiResponse = response.data.choices[0].message.content;
-      } else {
-        // Fallback response when no API key is configured
-        aiResponse = generateFallbackResponse(message, chatSession.context);
-      }
+      const aiMessages = chatSession.messages.slice(-10); // Get last 10 messages for context
+      aiResponse = await aiService.generateResponse(aiMessages, chatSession.context);
     } catch (apiError) {
       logger.error('AI API Error:', apiError);
-      aiResponse = generateFallbackResponse(message, chatSession.context);
+      aiResponse = aiService.generateFallbackResponse(message, chatSession.context);
     }
 
     const responseTime = Date.now() - startTime;
@@ -257,39 +238,14 @@ const deleteChatSession = async (req, res) => {
 
 // Helper function to get system prompt based on context
 const getSystemPrompt = (context) => {
-  const prompts = {
-    cosmic: 'You are an AI assistant for the AGI Cosmic platform, specializing in aerospace technology, space exploration, and cosmic phenomena. Provide helpful, accurate, and engaging responses about space, technology, and related topics.',
-    aerospace: 'You are an aerospace engineering expert. Provide technical guidance on aircraft design, propulsion systems, aerodynamics, and space technology.',
-    ai: 'You are an AI and machine learning expert. Help with AI concepts, implementation, and best practices in artificial intelligence.',
-    technical: 'You are a technical expert. Provide detailed technical explanations and solutions for engineering and technology problems.',
-    general: 'You are a helpful AI assistant. Provide accurate and helpful responses to user questions.'
-  };
-
-  return prompts[context] || prompts.cosmic;
+  // This function is now handled by the AI service
+  return aiService.getSystemPrompt(context);
 };
 
-// Fallback response generator
+// Fallback response generator  
 const generateFallbackResponse = (message, context) => {
-  const responses = {
-    cosmic: [
-      "Fascinating question about the cosmos! While I don't have access to real-time AI processing, I can tell you that space exploration continues to reveal amazing discoveries.",
-      "The universe is vast and full of mysteries. Your question touches on important aspects of cosmic understanding.",
-      "Space technology and cosmic phenomena are incredibly complex topics. Thank you for your interest in exploring the universe!"
-    ],
-    aerospace: [
-      "That's an interesting aerospace engineering question! Modern aircraft and spacecraft design involves complex engineering principles.",
-      "Aerospace technology continues to advance rapidly, with new innovations in propulsion and materials science.",
-      "Flight dynamics and space systems require careful consideration of many engineering factors."
-    ],
-    general: [
-      "Thank you for your question! I'm processing your request and working to provide helpful information.",
-      "That's an interesting topic to explore. Let me help you understand this better.",
-      "I appreciate your curiosity and am here to assist with your questions."
-    ]
-  };
-
-  const contextResponses = responses[context] || responses.general;
-  return contextResponses[Math.floor(Math.random() * contextResponses.length)];
+  // This function is now handled by the AI service
+  return aiService.generateFallbackResponse(message, context);
 };
 
 module.exports = {
