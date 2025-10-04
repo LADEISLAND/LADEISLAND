@@ -2,11 +2,145 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AGI Cosmic 3D Demo</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>AGI Cosmic - Aerospace Intelligence Platform</title>
+    <meta name="title" content="AGI Cosmic - Aerospace Intelligence Platform" />
+    <meta name="description" content="Explore the solar system with interactive 3D visualization and AI-powered aerospace intelligence. Learn about planets, space technology, and cosmic phenomena." />
+    <meta name="keywords" content="space, solar system, AI, astronomy, aerospace, education, 3D, planets, exploration, science" />
+    <meta name="author" content="AGI Cosmic" />
+    
+    <!-- Theme -->
+    <meta name="theme-color" content="#00d4ff" />
+    <meta name="msapplication-TileColor" content="#0a0a0f" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://agicosmicapp.com/" />
+    <meta property="og:title" content="AGI Cosmic - Aerospace Intelligence Platform" />
+    <meta property="og:description" content="Explore the solar system with interactive 3D visualization and AI-powered aerospace intelligence." />
+    <meta property="og:image" content="https://agicosmicapp.com/og-image.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://agicosmicapp.com/" />
+    <meta property="twitter:title" content="AGI Cosmic - Aerospace Intelligence Platform" />
+    <meta property="twitter:description" content="Explore the solar system with interactive 3D visualization and AI-powered aerospace intelligence." />
+    <meta property="twitter:image" content="https://agicosmicapp.com/og-image.png" />
+    
+    <!-- iOS Specific -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AGI Cosmic" />
+    
+    <!-- Android Specific -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Performance hints -->
+    <link rel="dns-prefetch" href="//api.your-domain.com" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AGI Cosmic",
+      "operatingSystem": ["iOS", "Android", "Windows", "macOS", "Linux"],
+      "applicationCategory": "EducationalApplication",
+      "description": "Explore the solar system with interactive 3D visualization and AI-powered aerospace intelligence.",
+      "url": "https://agicosmicapp.com",
+      "screenshot": "https://agicosmicapp.com/screenshots/desktop-1.png",
+      "author": {
+        "@type": "Organization",
+        "name": "AGI Cosmic"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+    
+    <!-- Install Prompt -->
+    <script>
+      let deferredPrompt;
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install button or banner
+        const installButton = document.createElement('button');
+        installButton.textContent = 'Install AGI Cosmic';
+        installButton.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 1000;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+          color: white;
+          border: none;
+          border-radius: 25px;
+          font-weight: 600;
+          cursor: pointer;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        `;
+        
+        installButton.addEventListener('click', () => {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            installButton.remove();
+          });
+        });
+        
+        document.body.appendChild(installButton);
+        
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+          if (installButton.parentNode) {
+            installButton.remove();
+          }
+        }, 10000);
+      });
+    </script>
   </body>
 </html>

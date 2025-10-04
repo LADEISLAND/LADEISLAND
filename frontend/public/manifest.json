@@ -1,0 +1,133 @@
+{
+  "name": "AGI Cosmic - Aerospace Intelligence",
+  "short_name": "AGI Cosmic",
+  "description": "Explore the solar system with AI-powered aerospace intelligence",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00d4ff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "reference", "entertainment", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-solar-system.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Interactive 3D Solar System"
+    },
+    {
+      "src": "/screenshots/desktop-ai-chat.png",
+      "sizes": "1280x720",
+      "type": "image/png", 
+      "form_factor": "wide",
+      "label": "AI-Powered Chat Assistant"
+    },
+    {
+      "src": "/screenshots/mobile-explore.png",
+      "sizes": "375x667",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile Planet Exploration"
+    },
+    {
+      "src": "/screenshots/mobile-chat.png",
+      "sizes": "375x667", 
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile AI Chat Interface"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explore Solar System",
+      "short_name": "Explore",
+      "description": "Start exploring the interactive solar system",
+      "url": "/#explore",
+      "icons": [
+        {
+          "src": "/icons/shortcut-explore.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Chat with AI",
+      "short_name": "Chat",
+      "description": "Start a conversation with the AI assistant", 
+      "url": "/#chat",
+      "icons": [
+        {
+          "src": "/icons/shortcut-chat.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "itunes",
+      "id": "com.agicosmicapp.ios"
+    },
+    {
+      "platform": "play",
+      "id": "com.agicosmicapp.android"
+    }
+  ]
+}
